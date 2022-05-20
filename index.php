@@ -6,55 +6,57 @@ class HolidayPlanner
       "25.12.2020", "1.1.2021", "6.1.2021", "2.4.2021", "5.4.2021", "13.5.2021", "20.6.2021", "6.12.2021", "24.12.2021"];
   private $holidaysCount;
 
-  private $validStart = "1.4.2020";
+  private $validStart;
 
-  private $validEnd="31.03.2021";
+  private $validEnd;
 
-  public function __construct()
+  public function __construct($validStart = "", $validEnd = "")
   {
     $this->holidaysCount = 0;
-    return $this->convertStringToDateImmutable($this->publicHolidays);
-
+    $this->validStart = $validStart;
+    $this->validEnd = $validEnd;
   }
 
-  public function getDates(DateTimeImmutable $start, DateTimeImmutable $end)
+  public function addPublicHoliday($date)
+  {
+    $this->publicHolidays[] = $date;
+  }
+
+  public function getHolidaysCount(DateTimeImmutable $start, DateTimeImmutable $end)
   {
     // validate start and end dates
     $date = new DateTime($start->format("Y-m-d"));
     $endDate = new DateTime($end->format("Y-m-h"));
 
-    if ($this->isDateValid($date, $endDate)){
-      var_dump("DAtes are valid");
+    if ($this->isDateValid($date, $endDate)) {
+      $publicHolidays = $this->convertStringToDateImmutable($this->publicHolidays);
+      $publicHolidayOrSunday = 0;
 
-    }
-    else
-    {
-      var_dump("INVALID DATES");
-    }
+      // total number of days in given dates
+      $totalDays = $start->diff($end)->days + 1;
+      var_dump($totalDays);
 
-    $publicHolidays = $this->convertStringToDateImmutable($this->publicHolidays);
-    $publicHolidayOrSunday = 0;
+      while ($date <= $end) {
 
-    // total number of days in given dates
-    $totalDays = $date->diff($end)->d + 1;
-
-    while ($date <= $end) {
-
-      if (in_array($date, $publicHolidays) || $this->isSunday($date))
-      {
-        //$date->format('D') == 'Sun') {
-        $publicHolidayOrSunday++;
+        if (in_array($date, $publicHolidays) || $this->isSunday($date)) {
+          $publicHolidayOrSunday++;
+        }
+        $date = $date->add(new DateInterval('P1D'));
       }
-      $date = $date->add(new DateInterval('P1D'));
-    }
 
-    $this->holidaysCount = $totalDays - $publicHolidayOrSunday;
-    return array(
-        "start" => $start,
-        "end" => $end,
-        "total-public-holidays-or-sundays" => $publicHolidayOrSunday,
-        "total holidays" => $this->holidaysCount
-    );
+      $this->holidaysCount = $totalDays - $publicHolidayOrSunday;
+
+      return array(
+          "start" => $start,
+          "end" => $end,
+          "total-days" => $totalDays,
+          "total-public-holidays-or-sundays" => $publicHolidayOrSunday,
+          "total holidays" => $this->holidaysCount
+      );
+    } else {
+      var_dump("INVALID DATES");
+      return [];
+    }
   }
 
   public function convertStringToDateImmutable($holidays)
@@ -65,9 +67,7 @@ class HolidayPlanner
         $convertedDates[] = new DateTimeImmutable($holiday);
       }
       return $convertedDates;
-    }
-    else
-    {
+    } else {
       return new DateTimeImmutable($holidays);;
     }
 
@@ -83,21 +83,21 @@ class HolidayPlanner
     $validStart = $this->convertStringToDateImmutable($this->validStart);
     $validEnd = $this->convertStringToDateImmutable($this->validEnd);
 
-    if ($start >= $validStart  && $start <= $validEnd
-        && $end >= $validStart && $end <= $validEnd){
+    if ($start >= $validStart && $start <= $validEnd
+        && $end >= $validStart && $end <= $validEnd) {
 
       return true;
     }
     return false;
 
-    }
+  }
 }
 
-$start = new DateTimeImmutable('2021-04-10');
-$end = new DateTimeImmutable('2022-05-01');
+$start = new DateTimeImmutable('1.03.2020');
+$end = new DateTimeImmutable('1.4.2021');
 
-$holiday = new HolidayPlanner();
-var_dump($holiday->getDates($start, $end));
+$holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
+var_dump($holiday->getHolidaysCount($start, $end));
 
 
 
