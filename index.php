@@ -34,7 +34,6 @@ class HolidayPlanner
 
       // total number of days in given dates
       $totalDays = $start->diff($end)->days + 1;
-      var_dump($totalDays);
 
       while ($date <= $end) {
 
@@ -51,7 +50,7 @@ class HolidayPlanner
           "end" => $end,
           "total-days" => $totalDays,
           "total-public-holidays-or-sundays" => $publicHolidayOrSunday,
-          "total holidays" => $this->holidaysCount
+          "total-holidays" => $this->holidaysCount
       );
     } else {
       var_dump("INVALID DATES");
@@ -97,7 +96,8 @@ $start = new DateTimeImmutable('1.03.2020');
 $end = new DateTimeImmutable('1.4.2021');
 
 $holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
-var_dump($holiday->getHolidaysCount($start, $end));
+$result = $holiday->getHolidaysCount($start, $end);
+var_dump($result['total-holidays']);
 
 
 
