@@ -2,6 +2,7 @@
 
 class HolidayPlanner
 {
+  const MAX_TIME_SPAN = 50;
   private $publicHolidays = ["1.1.2020", "6.1.2020", "10.04.2020", "13.04.2020", "1.5.2020", "21.5.2020", "19.6.2020", "24.12.2020",
       "25.12.2020", "1.1.2021", "6.1.2021", "2.4.2021", "5.4.2021", "13.5.2021", "20.6.2021", "6.12.2021", "24.12.2021"];
   private $holidaysCount;
@@ -45,12 +46,22 @@ class HolidayPlanner
 
       $this->holidaysCount = $totalDays - $publicHolidayOrSunday;
 
+      if ($this->holidaysCount > self::MAX_TIME_SPAN) {
+        return array(
+            "start" => $start,
+            "end" => $end,
+            "total-days" => $totalDays,
+            "total-public-holidays-or-sundays" => $publicHolidayOrSunday,
+            "total_holidays" => $this->holidaysCount,
+            "remaining_holidays" => $this->holidaysCount - self::MAX_TIME_SPAN,
+        );
+      }
       return array(
           "start" => $start,
           "end" => $end,
           "total-days" => $totalDays,
           "total-public-holidays-or-sundays" => $publicHolidayOrSunday,
-          "total-holidays" => $this->holidaysCount
+          "total_holidays" => $this->holidaysCount,
       );
     } else {
       var_dump("INVALID DATES");
@@ -88,17 +99,16 @@ class HolidayPlanner
       return true;
     }
     return false;
-
   }
 }
 
-$start = new DateTimeImmutable('1.03.2020');
-$end = new DateTimeImmutable('1.4.2021');
+$holidayStart = new DateTimeImmutable('30.04.2020');
+$holidayEnd = new DateTimeImmutable('30.7.2020');
 
 $holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
-$result = $holiday->getHolidaysCount($start, $end);
-var_dump($result['total-holidays']);
-
+$result = $holiday->getHolidaysCount($holidayStart, $holidayEnd);
+var_dump($result);
+print($result["total_holidays"]);
 
 
 
