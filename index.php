@@ -45,9 +45,7 @@ class HolidayPlanner
           $actualHolidaysCount++;
 
           if ($actualHolidaysCount == self::MAX_TIME_SPAN) {
-//            $message ="maximum length of the time span reached.";
             break;
-
           }
         }
 
@@ -58,25 +56,24 @@ class HolidayPlanner
 
       if ($this->holidaysCount >= self::MAX_TIME_SPAN) {
         return array(
-            "desired_start" => $start->format("d M Y"),
-            "desired_end" => $end->format("d M Y"),
+            "desired_start" => $start->format("d M, Y"),
+            "desired_end" => $end->format("d M, Y"),
             "total-days" => $totalDays,
             "total-public-holidays-or-sundays" => $publicHolidayOrSunday,
             "total_holidays" => $this->holidaysCount,
-            "last_date" => $date->format("d.M.Y"),
+            "last_date" => $date->format("d M, Y"),
             "message" => "Maximum length of the time span reached on " . $date->format("d M, Y"),
         );
       }
       return array(
-          "desired_start" => $start->format("d M Y"),
-          "desired_end" => $end->format("d M Y"),
+          "desired_start" => $start->format("d M, Y"),
+          "desired_end" => $end->format("d M, Y"),
           "total-days" => $totalDays,
           "total-public-holidays-or-sundays" => $publicHolidayOrSunday,
           "total_holidays" => $this->holidaysCount,
       );
     } else {
-      var_dump("INVALID DATES");
-      return [];
+      exit ("INVALID DATES provided. Valid start date is " . $this->validStart . " and end date is " . $this->validEnd);
     }
   }
 
@@ -114,12 +111,12 @@ class HolidayPlanner
 }
 
 $holidayStart = new DateTimeImmutable('30.04.2020');
-$holidayEnd = new DateTimeImmutable('30.7.2020');
+$holidayEnd = new DateTimeImmutable('25.6.2022');
 
 $holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
 $result = $holiday->getHolidaysCount($holidayStart, $holidayEnd);
-var_dump($result);
-print($result["total_holidays"]);
+//var_dump($result);
+print("Total number of possible holidays in given period (" . $result['desired_start'] . " - " . $result['desired_end'] . ") = " . $result["total_holidays"]);
 
 
 
