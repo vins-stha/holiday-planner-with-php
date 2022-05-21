@@ -32,6 +32,7 @@ class HolidayPlanner
     if ($this->isDateValid($date, $endDate)) {
       $publicHolidays = $this->convertStringToDateImmutable($this->publicHolidays);
       $publicHolidayOrSunday = 0;
+      $actualHolidaysCount = 0;
 
       // total number of days in given dates
       $totalDays = $start->diff($end)->days + 1;
@@ -40,25 +41,35 @@ class HolidayPlanner
 
         if (in_array($date, $publicHolidays) || $this->isSunday($date)) {
           $publicHolidayOrSunday++;
+        } else {
+          $actualHolidaysCount++;
+
+          if ($actualHolidaysCount == self::MAX_TIME_SPAN) {
+//            $message ="maximum length of the time span reached.";
+            break;
+
+          }
         }
+
         $date = $date->add(new DateInterval('P1D'));
       }
 
-      $this->holidaysCount = $totalDays - $publicHolidayOrSunday;
+      $this->holidaysCount = $actualHolidaysCount;//$totalDays - $publicHolidayOrSunday;
 
-      if ($this->holidaysCount > self::MAX_TIME_SPAN) {
+      if ($this->holidaysCount >= self::MAX_TIME_SPAN) {
         return array(
-            "start" => $start,
-            "end" => $end,
+            "desired_start" => $start->format("d M Y"),
+            "desired_end" => $end->format("d M Y"),
             "total-days" => $totalDays,
             "total-public-holidays-or-sundays" => $publicHolidayOrSunday,
             "total_holidays" => $this->holidaysCount,
-            "remaining_holidays" => $this->holidaysCount - self::MAX_TIME_SPAN,
+            "last_date" => $date->format("d.M.Y"),
+            "message" => "Maximum length of the time span reached on " . $date->format("d M, Y"),
         );
       }
       return array(
-          "start" => $start,
-          "end" => $end,
+          "desired_start" => $start->format("d M Y"),
+          "desired_end" => $end->format("d M Y"),
           "total-days" => $totalDays,
           "total-public-holidays-or-sundays" => $publicHolidayOrSunday,
           "total_holidays" => $this->holidaysCount,
