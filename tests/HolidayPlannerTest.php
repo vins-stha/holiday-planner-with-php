@@ -27,4 +27,15 @@ class HolidayPlannerTest extends TestCase
 
     $this->assertTrue($dateObject instanceof DateTimeImmutable, true);
   }
+
+  public function testAddPublicHolidays(){
+    $holidayPlanner = new HolidayPlanner("", "");
+    $countBefore = $holidayPlanner->publicHolidays;
+
+    $holidayPlanner->addPublicHoliday("1.1.2022");
+
+    $this->assertEquals($countBefore + 1, $holidayPlanner->publicHolidays);
+  }
+
+
 }

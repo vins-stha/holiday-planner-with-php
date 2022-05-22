@@ -21,6 +21,7 @@ class HolidayPlanner
   public function addPublicHoliday($date)
   {
     $this->publicHolidays[] = $date;
+    return $this->publicHolidays;
   }
 
   public function getHolidaysCount(DateTimeImmutable $start, DateTimeImmutable $end)
@@ -107,6 +108,14 @@ class HolidayPlanner
       return true;
     }
     return false;
+  }
+
+  public function __get($name)
+  {
+    if($name == "publicHolidays")
+    {
+      return count($this->publicHolidays);
+    }
   }
 }
 
