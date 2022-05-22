@@ -119,9 +119,8 @@ function main()
 
   $holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
   $result = $holiday->getHolidaysCount($holidayStart, $holidayEnd);
-//var_dump($result);
   print("Total number of possible holidays in given period (" . $result['desired_start'] . " - " . $result['desired_end'] . ") = " . $result["total_holidays"]);
 
 }
 
-main();
+//main();
