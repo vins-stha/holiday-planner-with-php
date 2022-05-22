@@ -45,10 +45,17 @@ class HolidayPlannerTest extends TestCase
 
     $holidayStart = new DateTimeImmutable('30.04.2020');
     $holidayEnd = new DateTimeImmutable('25.6.2020');
+    $holidayEnd2 = new DateTimeImmutable('25.9.2020');
+
 
     $results = $holidayPlanner->getHolidaysCount($holidayStart, $holidayEnd);
 
     $this->assertEquals(46, $results['total_holidays']);
+
+    $results = $holidayPlanner->getHolidaysCount($holidayStart, $holidayEnd2);
+    $this->assertEquals(50, $results['total_holidays']);
+
+
   }
 
 }

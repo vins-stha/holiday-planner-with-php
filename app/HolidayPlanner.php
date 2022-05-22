@@ -112,8 +112,7 @@ class HolidayPlanner
 
   public function __get($name)
   {
-    if($name == "publicHolidays")
-    {
+    if ($name == "publicHolidays") {
       return count($this->publicHolidays);
     }
   }
@@ -128,7 +127,7 @@ function main()
 
   $holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
   $result = $holiday->getHolidaysCount($holidayStart, $holidayEnd);
-  print("Total number of possible holidays in given period (" . $result['desired_start'] . " - " . $result['desired_end'] . ") = " . $result["total_holidays"]);
+  print("Total number of possible holidays in given period (" . $result['desired_start'] . " - " . $result['desired_end'] . ") = " . $result["total_holidays"] . "\n");
 
 }
 
