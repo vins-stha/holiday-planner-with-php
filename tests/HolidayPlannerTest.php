@@ -18,4 +18,13 @@ class HolidayPlannerTest extends TestCase
 
     $this->assertTrue($holidayPlanner->isDateValid($holidayStart,$holidayEnd));
   }
+
+  public function testConvertStringToDateImmutable(){
+    $holidayPlanner = new HolidayPlanner("", "");
+    $testDate="30.04.2020";
+
+    $dateObject = $holidayPlanner->convertStringToDateImmutable($testDate);
+
+    $this->assertTrue($dateObject instanceof DateTimeImmutable, true);
+  }
 }
