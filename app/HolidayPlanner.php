@@ -124,7 +124,7 @@ class HolidayPlanner
 function main()
 {
   $holidayStart = new DateTimeImmutable('30.04.2020');
-  $holidayEnd = new DateTimeImmutable('25.6.2022');
+  $holidayEnd = new DateTimeImmutable('25.6.2020');
 
   $holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
   $result = $holiday->getHolidaysCount($holidayStart, $holidayEnd);
@@ -132,4 +132,4 @@ function main()
 
 }
 
-//main();
+main();

@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="bf965569-5801-449a-84bd-5f7087d49386" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.phpunit.result.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.phpunit.result.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/HolidayPlanner.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/HolidayPlanner.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/HolidayPlannerTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/HolidayPlannerTest.php" afterDir="false" />
     </list>
