@@ -1,5 +1,5 @@
 <?php
-
+include('ValidateItem.php');
 class HolidayPlanner
 {
   const MAX_TIME_SPAN = 50;
@@ -14,24 +14,23 @@ class HolidayPlanner
   public function __construct($validStart = "", $validEnd = "")
   {
     $this->holidaysCount = 0;
-    $this->validStart = $validStart;
-    $this->validEnd = $validEnd;
+    $this->validStart = ValidateItem::convertStringToDateImmutable($validStart);
+    $this->validEnd = ValidateItem::convertStringToDateImmutable($validEnd);
   }
 
-  public function addPublicHoliday($date)
+  public function addPublicHoliday(String $date):array
   {
     $this->publicHolidays[] = $date;
     return $this->publicHolidays;
   }
 
-  public function getHolidaysCount(DateTimeImmutable $start, DateTimeImmutable $end)
+  public function getHolidaysCount(DateTimeImmutable $start, DateTimeImmutable $end):int
   {
-    // validate start and end dates
     $date = new DateTime($start->format("Y-m-d"));
-    $endDate = new DateTime($end->format("Y-m-h"));
 
-    if ($this->isDateValid($date, $endDate)) {
-      $publicHolidays = $this->convertStringToDateImmutable($this->publicHolidays);
+    if(ValidateItem::areDatesValid($start, $end, $this->validStart, $this->validEnd))
+    {
+      $publicHolidays = ValidateItem::convertStringToDateImmutable($this->publicHolidays);
       $publicHolidayOrSunday = 0;
       $actualHolidaysCount = 0;
 
@@ -56,61 +55,20 @@ class HolidayPlanner
       $this->holidaysCount = $actualHolidaysCount;
 
       if ($this->holidaysCount >= self::MAX_TIME_SPAN) {
-        return array(
-            "desired_start" => $start->format("d M, Y"),
-            "desired_end" => $end->format("d M, Y"),
-            "total-days" => $totalDays,
-            "total-public-holidays-or-sundays" => $publicHolidayOrSunday,
-            "total_holidays" => $this->holidaysCount,
-            "last_date" => $date->format("d M, Y"),
-            "message" => "Maximum length of the time span reached on " . $date->format("d M, Y"),
-        );
+      // to do
       }
-      return array(
-          "desired_start" => $start->format("d M, Y"),
-          "desired_end" => $end->format("d M, Y"),
-          "total-days" => $totalDays,
-          "total-public-holidays-or-sundays" => $publicHolidayOrSunday,
-          "total_holidays" => $this->holidaysCount,
-      );
+      return $this->holidaysCount;
     } else {
       exit ("INVALID DATES provided. Valid start date is " . $this->validStart . " and end date is " . $this->validEnd);
     }
   }
 
-  public function convertStringToDateImmutable($holidays)
-  {
-    if (is_array($holidays)) {
-      $convertedDates = [];
-      foreach ($holidays as $holiday) {
-        $convertedDates[] = new DateTimeImmutable($holiday);
-      }
-      return $convertedDates;
-    } else {
-      return new DateTimeImmutable($holidays);;
-    }
-
-  }
-
-  public function isSunday($date)
+  public function isSunday(DateTime $date):bool
   {
     return $date->format('D') == 'Sun';
   }
 
-  public function isDateValid($start, $end)
-  {
-    $validStart = $this->convertStringToDateImmutable($this->validStart);
-    $validEnd = $this->convertStringToDateImmutable($this->validEnd);
-
-    if ($start >= $validStart && $start <= $validEnd
-        && $end >= $validStart && $end <= $validEnd) {
-
-      return true;
-    }
-    return false;
-  }
-
-  public function __get($name)
+  public function __get(String $name):int
   {
     if ($name == "publicHolidays") {
       return count($this->publicHolidays);
@@ -127,7 +85,7 @@ function main()
 
   $holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
   $result = $holiday->getHolidaysCount($holidayStart, $holidayEnd);
-  print("Total number of possible holidays in given period (" . $result['desired_start'] . " - " . $result['desired_end'] . ") = " . $result["total_holidays"] . "\n");
+  print("Total number of possible holidays in given period (" . $holidayStart->format('Y-m-d') . " - " . $holidayEnd->format('Y-m-d') . ") = " . $result . "\n");
 
 }
 
