@@ -21,6 +21,7 @@ class HolidayPlanner
   public function addPublicHoliday($date)
   {
     $this->publicHolidays[] = $date;
+    return $this->publicHolidays;
   }
 
   public function getHolidaysCount(DateTimeImmutable $start, DateTimeImmutable $end)
@@ -52,7 +53,7 @@ class HolidayPlanner
         $date = $date->add(new DateInterval('P1D'));
       }
 
-      $this->holidaysCount = $actualHolidaysCount;//$totalDays - $publicHolidayOrSunday;
+      $this->holidaysCount = $actualHolidaysCount;
 
       if ($this->holidaysCount >= self::MAX_TIME_SPAN) {
         return array(
@@ -96,7 +97,7 @@ class HolidayPlanner
     return $date->format('D') == 'Sun';
   }
 
-  protected function isDateValid($start, $end)
+  public function isDateValid($start, $end)
   {
     $validStart = $this->convertStringToDateImmutable($this->validStart);
     $validEnd = $this->convertStringToDateImmutable($this->validEnd);
@@ -108,16 +109,26 @@ class HolidayPlanner
     }
     return false;
   }
+
+  public function __get($name)
+  {
+    if ($name == "publicHolidays") {
+      return count($this->publicHolidays);
+    }
+  }
 }
 
-$holidayStart = new DateTimeImmutable('30.04.2020');
-$holidayEnd = new DateTimeImmutable('25.6.2022');
+;
 
-$holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
-$result = $holiday->getHolidaysCount($holidayStart, $holidayEnd);
-//var_dump($result);
-print("Total number of possible holidays in given period (" . $result['desired_start'] . " - " . $result['desired_end'] . ") = " . $result["total_holidays"]);
+function main()
+{
+  $holidayStart = new DateTimeImmutable('30.04.2020');
+  $holidayEnd = new DateTimeImmutable('25.6.2020');
 
+  $holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
+  $result = $holiday->getHolidaysCount($holidayStart, $holidayEnd);
+  print("Total number of possible holidays in given period (" . $result['desired_start'] . " - " . $result['desired_end'] . ") = " . $result["total_holidays"] . "\n");
 
+}
 
-
+main();
