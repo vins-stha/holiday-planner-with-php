@@ -56,12 +56,9 @@ class HolidayPlanner
 
       $this->holidaysCount = $actualHolidaysCount;
 
-      if ($this->holidaysCount >= self::MAX_TIME_SPAN) {
-        // to do
-      }
       return $this->holidaysCount;
     } else {
-      exit ("INVALID DATES provided. Valid start date is " . $this->validStart . " and end date is " . $this->validEnd);
+      exit ("INVALID DATES or TIME SPAN. Valid start date is " . $this->validStart->format("d-m-Y") . " and end date is " . $this->validEnd->format("d-m-Y") . " and time span can not exceed 50 days");
     }
   }
 

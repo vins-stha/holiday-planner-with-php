@@ -5,8 +5,8 @@ include('HolidayPlanner.php');
 
 function main()
 {
-  $userInput_StartDateMonth = "30.04";
-  $userInput_EndDateMonth = "30.05";
+  $userInput_StartDateMonth = "30.06";
+  $userInput_EndDateMonth = "15.08";
 
   $holidayStart = DateObjectActions::getFullDate($userInput_StartDateMonth);
   $holidayEnd = DateObjectActions::getFullDate($userInput_EndDateMonth);
