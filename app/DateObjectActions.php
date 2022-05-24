@@ -42,9 +42,16 @@ class DateObjectActions
 
     $year = strval($dateArray[1]) >= 4 ? "2020" : "2021";
 
-    $holidayStart = new DateTimeImmutable($date . $delimeter . $year);
+    $fullDate = new DateTimeImmutable($date . $delimeter . $year);
 
-    return $holidayStart;
+    return $fullDate;
   }
 
+  public static function isTimeSpanValid(DateTimeImmutable $start, DateTimeImmutable $end): bool
+  {
+    $start = new DateTime($start->format("Y-m-d"));
+    $end = new DateTime($end->format("Y-m-d"));
+
+    return $start->diff($end)->days <= HolidayPlanner::getMaxTimeSpan() ? true : false;
+  }
 }

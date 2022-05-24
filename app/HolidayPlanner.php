@@ -4,6 +4,7 @@ include('DateObjectActions.php');
 class HolidayPlanner
 {
   const MAX_TIME_SPAN = 50;
+
   private $publicHolidays = ["1.1.2020", "6.1.2020", "10.04.2020", "13.04.2020", "1.5.2020", "21.5.2020", "19.6.2020", "24.12.2020",
       "25.12.2020", "1.1.2021", "6.1.2021", "2.4.2021", "5.4.2021", "13.5.2021", "20.6.2021", "6.12.2021", "24.12.2021"];
   private $holidaysCount;
@@ -29,8 +30,9 @@ class HolidayPlanner
   {
     $date = new DateTime($start->format("Y-m-d"));
 
-    if (DateObjectActions::areDatesValid($start, $end, $this->validStart, $this->validEnd)) {
+    if (DateObjectActions::isTimeSpanValid($start, $end) && DateObjectActions::areDatesValid($start, $end, $this->validStart, $this->validEnd)) {
       $publicHolidays = DateObjectActions::convertStringToDateImmutable($this->publicHolidays);
+
       $publicHolidayOrSunday = 0;
       $actualHolidaysCount = 0;
 
@@ -74,23 +76,12 @@ class HolidayPlanner
       return count($this->publicHolidays);
     }
   }
+
+  public static function getMaxTimeSpan():int
+  {
+    return self::MAX_TIME_SPAN;
+  }
 }
 
 ;
 
-function main()
-{
-  $userInput_StartDateMonth = "30.04";
-  $userInput_EndDateMonth = "30.05";
-
-  $holidayStart = DateObjectActions::getFullDate($userInput_StartDateMonth);
-  $holidayEnd = DateObjectActions::getFullDate($userInput_EndDateMonth);
-
-  $holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
-  $holidayCount = $holiday->getHolidaysCount($holidayStart, $holidayEnd);
-
-  print("Total number of possible holidays in given period (" . $holidayStart->format('Y-m-d') . " - " . $holidayEnd->format('Y-m-d') . ") = " . $holidayCount . "\n");
-
-}
-
-main();
