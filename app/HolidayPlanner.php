@@ -1,5 +1,6 @@
 <?php
-include('ValidateItem.php');
+include('DateObjectActions.php');
+
 class HolidayPlanner
 {
   const MAX_TIME_SPAN = 50;
@@ -14,23 +15,22 @@ class HolidayPlanner
   public function __construct($validStart = "", $validEnd = "")
   {
     $this->holidaysCount = 0;
-    $this->validStart = ValidateItem::convertStringToDateImmutable($validStart);
-    $this->validEnd = ValidateItem::convertStringToDateImmutable($validEnd);
+    $this->validStart = DateObjectActions::convertStringToDateImmutable($validStart);
+    $this->validEnd = DateObjectActions::convertStringToDateImmutable($validEnd);
   }
 
-  public function addPublicHoliday(String $date):array
+  public function addPublicHoliday(String $date): array
   {
     $this->publicHolidays[] = $date;
     return $this->publicHolidays;
   }
 
-  public function getHolidaysCount(DateTimeImmutable $start, DateTimeImmutable $end):int
+  public function getHolidaysCount(DateTimeImmutable $start, DateTimeImmutable $end): int
   {
     $date = new DateTime($start->format("Y-m-d"));
 
-    if(ValidateItem::areDatesValid($start, $end, $this->validStart, $this->validEnd))
-    {
-      $publicHolidays = ValidateItem::convertStringToDateImmutable($this->publicHolidays);
+    if (DateObjectActions::areDatesValid($start, $end, $this->validStart, $this->validEnd)) {
+      $publicHolidays = DateObjectActions::convertStringToDateImmutable($this->publicHolidays);
       $publicHolidayOrSunday = 0;
       $actualHolidaysCount = 0;
 
@@ -55,7 +55,7 @@ class HolidayPlanner
       $this->holidaysCount = $actualHolidaysCount;
 
       if ($this->holidaysCount >= self::MAX_TIME_SPAN) {
-      // to do
+        // to do
       }
       return $this->holidaysCount;
     } else {
@@ -63,12 +63,12 @@ class HolidayPlanner
     }
   }
 
-  public function isSunday(DateTime $date):bool
+  public function isSunday(DateTime $date): bool
   {
     return $date->format('D') == 'Sun';
   }
 
-  public function __get(String $name):int
+  public function __get(String $name): int
   {
     if ($name == "publicHolidays") {
       return count($this->publicHolidays);
@@ -80,12 +80,16 @@ class HolidayPlanner
 
 function main()
 {
-  $holidayStart = new DateTimeImmutable('30.04.2020');
-  $holidayEnd = new DateTimeImmutable('25.6.2020');
+  $userInput_StartDateMonth = "30.04";
+  $userInput_EndDateMonth = "30.05";
+
+  $holidayStart = DateObjectActions::getFullDate($userInput_StartDateMonth);
+  $holidayEnd = DateObjectActions::getFullDate($userInput_EndDateMonth);
 
   $holiday = new HolidayPlanner($validStart = "1.4.2020", $validEnd = "31.03.2021");
-  $result = $holiday->getHolidaysCount($holidayStart, $holidayEnd);
-  print("Total number of possible holidays in given period (" . $holidayStart->format('Y-m-d') . " - " . $holidayEnd->format('Y-m-d') . ") = " . $result . "\n");
+  $holidayCount = $holiday->getHolidaysCount($holidayStart, $holidayEnd);
+
+  print("Total number of possible holidays in given period (" . $holidayStart->format('Y-m-d') . " - " . $holidayEnd->format('Y-m-d') . ") = " . $holidayCount . "\n");
 
 }
 
