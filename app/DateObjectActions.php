@@ -54,4 +54,9 @@ class DateObjectActions
 
     return $start->diff($end)->days <= HolidayPlanner::getMaxTimeSpan() ? true : false;
   }
+
+  public static function isSunday(DateTime $date): bool
+  {
+    return $date->format('D') == 'Sun';
+  }
 }

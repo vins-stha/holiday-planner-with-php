@@ -41,7 +41,7 @@ class HolidayPlanner
 
       while ($date <= $end) {
 
-        if (in_array($date, $publicHolidays) || $this->isSunday($date)) {
+        if (in_array($date, $publicHolidays) || DateObjectActions::isSunday($date)) {
           $publicHolidayOrSunday++;
         } else {
           $actualHolidaysCount++;
@@ -60,11 +60,6 @@ class HolidayPlanner
     } else {
       exit ("INVALID DATES or TIME SPAN. Valid start date is " . $this->validStart->format("d-m-Y") . " and end date is " . $this->validEnd->format("d-m-Y") . " and time span can not exceed 50 days");
     }
-  }
-
-  public function isSunday(DateTime $date): bool
-  {
-    return $date->format('D') == 'Sun';
   }
 
   public function __get(String $name): int
